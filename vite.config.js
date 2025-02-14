@@ -10,9 +10,5 @@ export default defineConfig({
       "@": path.resolve("./src"),
     },
   },
-  build: {
-    rollupOptions: {
-      external: ["react-hook-form"],
-    },
-  },
-  })
+  }
+)
