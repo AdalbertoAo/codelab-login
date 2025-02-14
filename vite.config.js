@@ -14,4 +14,5 @@ export default defineConfig({
     rollupOptions: {
       external: ["react-hook-form"],
     },
-})
+  },
+  })
