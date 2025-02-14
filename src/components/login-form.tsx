@@ -3,12 +3,39 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const emailSchema = z.string().email({ message: "O email inserido é inválido" }).refine((email) => /@(gmail|hotmail|yahoo)\./.test(email), { 
+    message: "O domínio do email deve ser gmail, hotmail ou yahoo"
+  }).refine((email) => /\.(com|net|org|ao)$/.test(email), { 
+    message: "O email deve terminar com .com, .net, .org ou .ao"
+  });
+
+const loginSchema = z.object({
+  email: emailSchema,
+  password: z.string().min(6, { message: "A senha deve ter no mínimo 6 caracteres" })
+}); 
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
+
+
+  const {
+    register, 
+    handleSubmit,
+    formState: {errors}
+  } = useForm({resolver: zodResolver(loginSchema)});
+
+    const onSubmit = (data) => {
+      console.log("Dados enviados:", data);
+    };
+
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form onSubmit={handleSubmit(onSubmit)} className={cn("flex flex-col gap-6", className)} {...props} noValidate>
       <div className="flex flex-col gap-2">
       <p className="text-balance text-sm">
       Bem-vindo de volta
@@ -19,13 +46,16 @@ export function LoginForm({
       <div className="grid gap-6">
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input {...register("email")} id="email" type="email" placeholder="m@example.com" required />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
         </div>
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Senha</Label>
           </div>
-          <Input id="password" type="password" placeholder="0123456789" required />
+
+          <Input {...register("password")} id="password" type="password" placeholder="0123456789" required />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           
         </div>
         <div className="flex justify-between space-x-2">
