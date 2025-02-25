@@ -30,7 +30,7 @@ export function LoginForm({
     formState: {errors}
   } = useForm({resolver: zodResolver(loginSchema)});
 
-    const onSubmit = (data) => {
+    const onSubmit = (data: any) => {
       console.log("Dados enviados:", data);
     };
 
@@ -46,17 +46,38 @@ export function LoginForm({
       <div className="grid gap-6">
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input {...register("email")} id="email" type="email" placeholder="m@example.com" required />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+          <Input
+                {...register("email")}
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                className={`border p-2 rounded ${
+                  errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-200" : "border-gray-300 focus:border-green-500 focus:ring-green-200"
+                }`}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
+
         </div>
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Senha</Label>
           </div>
-
-          <Input {...register("password")} id="password" type="password" placeholder="0123456789" required />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-          
+            <Input
+              {...register("password")}
+              id="password"
+              type="password"
+              placeholder="0123456789"
+              required
+              className={`border p-2 rounded ${
+                errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-200" : "border-gray-300 focus:border-green-500 focus:ring-green-200"
+              }`}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
         </div>
         <div className="flex justify-between space-x-2">
 
@@ -70,7 +91,7 @@ export function LoginForm({
 
       <a href="#" className="text-xs underline font-normal text-primary">Esqueceu a senha?</a>
     </div>
-        <Button type="submit" className="w-full text-white font-semibold text-sm">
+        <Button type="submit" className="w-full text-white font-semibold text-sm bg-green-500">
           Fazer Login
         </Button>
         <Button  type="button" variant="outline"  className="w-full bg-gray-950 text-white font-semibold text-sm">
